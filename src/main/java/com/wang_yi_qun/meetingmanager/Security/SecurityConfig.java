@@ -24,11 +24,11 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(EmployeeRepository employeeRepository) {
         return username -> {
-            var user = employeeRepository.findByEmployeeName((username));
-            if (user == null) {
+            var optionalEmployee = employeeRepository.findByEmployeeName((username));
+            if (optionalEmployee.isEmpty()) {
                 throw new UsernameNotFoundException("User not found");
             }
-            return user;
+            return optionalEmployee.get();
         };
     }
 

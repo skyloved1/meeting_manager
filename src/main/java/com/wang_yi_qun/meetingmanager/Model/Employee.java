@@ -25,7 +25,7 @@ public class Employee implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employeeid")
     private int employeeID;
     @Column(name = "employeename")
@@ -45,6 +45,16 @@ public class Employee implements UserDetails {
     /// * 2: 已登入
     private int status;
 
+    public Employee(String employeeName, String username, String password, String phone, String email, String departmentID, int role, int status) {
+        this.employeeName = employeeName;
+        Username = username;
+        Password = password;
+        this.phone = phone;
+        this.email = email;
+        this.departmentID = departmentID;
+        this.role = role;
+        this.status = status;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
