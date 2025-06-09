@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PasswordConverter implements Converter<Employee, Employee> {
+public class PasswordConverter implements Converter<String, String> {
     private PasswordEncoder passwordEncoder;
 
     public PasswordConverter(PasswordEncoder passwordEncoder) {
@@ -16,11 +16,7 @@ public class PasswordConverter implements Converter<Employee, Employee> {
     }
 
     @Override
-    public Employee convert(Employee source) {
-        source.setPassword(passwordEncoder.encode(source.getPassword()));
-        return source;
+    public String convert(String source) {
+        return passwordEncoder.encode(source);
     }
-
-
-
 }
