@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,8 +30,8 @@ public class Employee implements UserDetails {
     @Column(name = "employeename")
     private String employeeName;
     @Column(name = "username")
-    private String Username;
-    private String Password;
+    private String username;
+    private String password;
     private String phone;
     private String email;
     @Column(name = "departmentid")
@@ -47,8 +46,8 @@ public class Employee implements UserDetails {
 
     public Employee(String employeeName, String username, String password, String phone, String email, String departmentID, int role, int status) {
         this.employeeName = employeeName;
-        Username = username;
-        Password = password;
+        this.username = username;
+        this.password = password;
         this.phone = phone;
         this.email = email;
         this.departmentID = departmentID;
@@ -109,8 +108,8 @@ public class Employee implements UserDetails {
         return "Employee{" +
                 "employeeID=" + employeeID +
                 ", employeeName='" + employeeName + '\'' +
-                ", Username='" + Username + '\'' +
-                ", Password='" + Password + '\'' +
+                ", Username='" + username + '\'' +
+                ", Password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", departmentID='" + departmentID + '\'' +
