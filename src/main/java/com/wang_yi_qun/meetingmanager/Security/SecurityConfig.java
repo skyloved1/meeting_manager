@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,7 +39,9 @@ public class SecurityConfig {
         };
     }
 
-    //TODO 添加登入 注销 注册等逻辑
+
+
+    //TODO 没有禁用默认登入页面
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -56,12 +59,18 @@ public class SecurityConfig {
                             form.passwordParameter("password");
                             form.successHandler((request, response, authentication) -> {
                                 // 登录成功后返回一个JSON对象
+                                final var json=new JSONObject();
+                                json.put("status", HttpStatus.OK.value());
+                                json.put("username", ((Employee) authentication.getPrincipal()).getEmployeeName());
+                                json.put("message", "Login successful");
                                 response.setContentType("application/json");
-                                response.getWriter().write("{\"status\": 200, \"message\": \"Login successful\"}");
+                                response.setCharacterEncoding("UTF-8");
+                                response.getWriter().write(json.toString());
                             });
                             form.failureHandler((request, response, authentication) -> {
                                 JSONObject jsonResponse = new JSONObject();
-                                response.setContentType("application/json,charset=UTF-8");
+                                response.setContentType("application/json");
+                                response.setCharacterEncoding("UTF-8");
                                 jsonResponse.put("status", HttpStatus.UNAUTHORIZED.value());
                                 jsonResponse.put("message", "Login failed: " + authentication.getMessage());
                                 response.getWriter().write(jsonResponse.toString());
@@ -77,15 +86,20 @@ public class SecurityConfig {
 
                             logout.logoutSuccessHandler((request, response, authentication) -> {
                                 JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("status", 200);
-                                jsonObject.put("username", authentication != null ? authentication.getName() : "anonymous");
-                                jsonObject.put("message", "Logout successful");
                                 if (authentication != null && authentication.getPrincipal() instanceof Employee employee) {
-                                    // 可以在这里设置用户状态为未登录
+                                    // 在清除认证信息前获取用户名
+                                    jsonObject.put("username", employee.getEmployeeName());
+                                    // 设置用户状态为未登录
                                     employee.setStatus(1); // 假设1表示未登录状态
                                     employeeRepository.save(employee);
+                                } else {
+                                    jsonObject.put("username", "anonymous");
                                 }
+                                jsonObject.put("status", 200);
+                                jsonObject.put("message", "Logout successful");
+
                                 response.setContentType("application/json");
+                                response.setCharacterEncoding("UTF-8");
                                 response.getWriter().write(jsonObject.toString());
                             });
                         }

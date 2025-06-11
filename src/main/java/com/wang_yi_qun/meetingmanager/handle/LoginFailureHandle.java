@@ -18,7 +18,8 @@ public class LoginFailureHandle implements AuthenticationFailureHandler {
         jsonObject.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         jsonObject.put("error", "login failure: " + exception.getMessage());
 
-        response.setContentType("application/json;charset=UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(jsonObject.toString());
     }
