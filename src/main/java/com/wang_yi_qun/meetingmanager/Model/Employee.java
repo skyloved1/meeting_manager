@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 @Entity
 @NoArgsConstructor(force = true)
 @Table(name = "`employee`")
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Data
 public class Employee implements UserDetails {
+
+
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,14 +39,18 @@ public class Employee implements UserDetails {
     private String departmentID;
     /// 1：管理员
     /// 2：普通员工
-    private int role = 2;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private EmployeeRole role = EmployeeRole.EMPLOYEE;
 
     /// * 0：已注册，未审核启用
     /// * 1：正在审核
     /// * 2: 正常账号
-    private int status;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EmployeeStatus status;
 
-    public Employee(String employeeName, String username, String password, String phone, String email, String departmentID, int role, int status) {
+    public Employee(String employeeName, String username, String password, String phone, String email, String departmentID, EmployeeRole role, EmployeeStatus status) {
         this.employeeName = employeeName;
         this.username = username;
         this.password = password;
@@ -61,23 +66,23 @@ public class Employee implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
         switch (status) {
-            case 0:
+            case UNVERIFIED:
                 authorities.add(new SimpleGrantedAuthority("STATUS_UNVERIFIED"));
                 break;
-            case 1:
+            case VERIFIED:
                 authorities.add(new SimpleGrantedAuthority("STATUS_VERIFIED"));
                 break;
-            case 2:
+            case VERIFYING:
                 authorities.add(new SimpleGrantedAuthority("STATUS_VERIFYING"));
                 break;
             default:
                 authorities.add(new SimpleGrantedAuthority("STATUS_UNKNOWN"));
         }
         switch (role) {
-            case 1:
+            case ADMIN:
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 break;
-            case 2:
+            case EMPLOYEE:
                 authorities.add(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
                 break;
 
@@ -89,12 +94,12 @@ public class Employee implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return status == 1;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return status == EmployeeStatus.VERIFYING;
     }
 
     @Override
@@ -104,7 +109,7 @@ public class Employee implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status != 0;
+        return status == EmployeeStatus.VERIFIED;
     }
 
     @Override

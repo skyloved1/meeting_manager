@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,7 +31,6 @@ public class SecurityConfig {
             return optionalEmployee.get();
         };
     }
-
 
 
     //TODO 没有禁用默认登入页面
@@ -83,8 +81,6 @@ public class SecurityConfig {
                                 if (authentication != null && authentication.getPrincipal() instanceof Employee employee) {
                                     // 在清除认证信息前获取用户名
                                     jsonObject.put("username", employee.getEmployeeName());
-                                    // 设置用户状态为未登录
-                                    employee.setStatus(1); // 假设1表示未登录状态
                                     employeeRepository.save(employee);
                                 } else {
                                     jsonObject.put("username", "anonymous");

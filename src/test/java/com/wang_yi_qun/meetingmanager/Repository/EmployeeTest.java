@@ -1,6 +1,8 @@
 package com.wang_yi_qun.meetingmanager.Repository;
 
 import com.wang_yi_qun.meetingmanager.Model.Employee;
+import com.wang_yi_qun.meetingmanager.Model.EmployeeRole;
+import com.wang_yi_qun.meetingmanager.Model.EmployeeStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +35,7 @@ public class EmployeeTest {
 
     @Test
     void insert() {
-        Employee employee = new Employee("testUser", "testUser", passwordEncoder.encode("test"), "13000000000", "test@test.com", "1", 2, 2);
+        Employee employee = new Employee("testUser", "testUser", passwordEncoder.encode("test"), "13000000000", "test@test.com", "1", EmployeeRole.EMPLOYEE, EmployeeStatus.VERIFYING);
         var optEmployee = employeeRepository.findByEmployeeName(employee.getEmployeeName());
         optEmployee.ifPresentOrElse(
                 existingEmployee -> System.out.println("Employee already exists: " + existingEmployee),

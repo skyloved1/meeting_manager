@@ -28,11 +28,19 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        // 检查用户是否启用
-        if (optionalEmployee.get().getStatus() == 0) { // 假设 status 为 0 表示未启用
-            throw new BadCredentialsException("User is not enabled");
+        // 检查用户状态
+        switch (optionalEmployee.get().getStatus()) {
+            case VERIFIED:
+                throw new BadCredentialsException("Account not activated");
+            case UNVERIFIED:
+                throw new BadCredentialsException("Account is under review");
+            case VERIFYING:
+                break;
+            default:
+                throw new BadCredentialsException("Unknown account status");
         }
-//TODO 暂时取消加密
+
+        //TODO 暂时取消加密
         // 验证密码
 //        if (!passwordEncoder.matches(password, employee.getPassword())) {
 //            throw new BadCredentialsException("Wrong password");
@@ -40,7 +48,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if(!password.equals(optionalEmployee.get().getPassword())) {
             throw new BadCredentialsException("Wrong password");
         }
-        optionalEmployee.get().setStatus(2);
         employeeRepository.save(optionalEmployee.get());
         // 返回认证后的对象
         return new UsernamePasswordAuthenticationToken(optionalEmployee.get(), password, optionalEmployee.get().getAuthorities());
