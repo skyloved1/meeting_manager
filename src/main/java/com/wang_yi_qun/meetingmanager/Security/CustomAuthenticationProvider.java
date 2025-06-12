@@ -30,11 +30,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         // 检查用户状态
         switch (optionalEmployee.get().getStatus()) {
-            case VERIFIED:
-                throw new BadCredentialsException("Account not activated");
             case UNVERIFIED:
-                throw new BadCredentialsException("Account is under review");
+                throw new BadCredentialsException("Account not activated");
             case VERIFYING:
+                throw new BadCredentialsException("Account is under review");
+            case VERIFIED:
                 break;
             default:
                 throw new BadCredentialsException("Unknown account status");

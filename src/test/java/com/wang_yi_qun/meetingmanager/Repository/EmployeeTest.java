@@ -35,7 +35,7 @@ public class EmployeeTest {
 
     @Test
     void insert() {
-        Employee employee = new Employee("testUser", "testUser", passwordEncoder.encode("test"), "13000000000", "test@test.com", "1", EmployeeRole.EMPLOYEE, EmployeeStatus.VERIFYING);
+        Employee employee = new Employee("t2", "t2", "t2", "13060000000", "tes2t@test2.com", "1", EmployeeRole.EMPLOYEE, EmployeeStatus.UNVERIFIED);
         var optEmployee = employeeRepository.findByEmployeeName(employee.getEmployeeName());
         optEmployee.ifPresentOrElse(
                 existingEmployee -> System.out.println("Employee already exists: " + existingEmployee),
