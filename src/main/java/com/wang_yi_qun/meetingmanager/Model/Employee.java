@@ -41,8 +41,8 @@ public class Employee implements UserDetails {
     private int role = 2;
 
     /// * 0：已注册，未审核启用
-    /// * 1：未登入
-    /// * 2: 已登入
+    /// * 1：正在审核
+    /// * 2: 正常账号
     private int status;
 
     public Employee(String employeeName, String username, String password, String phone, String email, String departmentID, int role, int status) {
