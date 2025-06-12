@@ -36,7 +36,7 @@ public class Employee implements UserDetails {
     private String phone;
     private String email;
     @Column(name = "departmentid")
-    private String departmentID;
+    private int departmentID;
     /// 1：管理员
     /// 2：普通员工
     @Column(name = "role")
@@ -50,7 +50,7 @@ public class Employee implements UserDetails {
     @Enumerated(EnumType.STRING)
     private EmployeeStatus status;
 
-    public Employee(String employeeName, String username, String password, String phone, String email, String departmentID, EmployeeRole role, EmployeeStatus status) {
+    public Employee(String employeeName, String username, String password, String phone, String email, int departmentID, EmployeeRole role, EmployeeStatus status) {
         this.employeeName = employeeName;
         this.username = username;
         this.password = password;
