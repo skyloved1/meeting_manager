@@ -36,6 +36,7 @@ public class Employee implements UserDetails {
     private String email;
     @Column(name = "departmentid")
     private String departmentID;
+    /// 1：管理员
     /// 2：普通员工
     private int role = 2;
 
@@ -67,12 +68,15 @@ public class Employee implements UserDetails {
                 authorities.add(new SimpleGrantedAuthority("STATUS_VERIFIED"));
                 break;
             case 2:
-                authorities.add(new SimpleGrantedAuthority("STATUS_LOGGED_IN"));
+                authorities.add(new SimpleGrantedAuthority("STATUS_VERIFYING"));
                 break;
             default:
                 authorities.add(new SimpleGrantedAuthority("STATUS_UNKNOWN"));
         }
         switch (role) {
+            case 1:
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                break;
             case 2:
                 authorities.add(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
                 break;
